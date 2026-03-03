@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 150 80% 55%;
+    --foreground: 210 80% 15%;
+
+    --card: 150 75% 48%;
+    --card-foreground: 210 80% 15%;
+
+    --popover: 150 80% 55%;
+    --popover-foreground: 210 80% 15%;
+
+    --primary: 210 80% 20%;
+    --primary-foreground: 150 80% 55%;
+
+    --secondary: 150 60% 45%;
+    --secondary-foreground: 210 80% 15%;
+
+    --muted: 150 50% 42%;
+    --muted-foreground: 210 40% 30%;
+
+    --accent: 190 70% 40%;
+    --accent-foreground: 210 80% 15%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 160 40% 40%;
+    --input: 160 40% 40%;
+    --ring: 210 80% 20%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 210 80% 12%;
+    --sidebar-foreground: 150 80% 55%;
+    --sidebar-primary: 150 80% 55%;
+    --sidebar-primary-foreground: 210 80% 15%;
+    --sidebar-accent: 190 70% 40%;
+    --sidebar-accent-foreground: 210 80% 15%;
+    --sidebar-border: 210 50% 25%;
+    --sidebar-ring: 150 80% 55%;
+
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    /* Dark section variants */
+    --dark-bg: 210 80% 12%;
+    --dark-fg: 0 0% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .section-label {
+    @apply text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground;
+  }
+
+  .glass-card {
+    @apply bg-card/60 backdrop-blur-md border border-border/50 rounded-xl;
+  }
+
+  .dark-section {
+    background-color: hsl(210 80% 12%);
+    color: hsl(0 0% 95%);
+  }
+}
