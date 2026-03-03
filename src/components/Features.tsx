@@ -1,72 +1,122 @@
 import { Truck, Box, Shield, Zap, Globe, Smartphone } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import { Button } from "./ui/button";
 
-const features = [
-    {
-        title: "Fulfillment Global",
-        description: "Guardamos, preparamos y enviamos tus productos desde nuestros centros estratégicos.",
-        icon: Box,
-        color: "bg-blue-500",
-    },
-    {
-        title: "Entregas en el Día",
-        description: "Aumentá tus ventas hasta un 63% ofreciendo envíos same-day y next-day.",
-        icon: Zap,
-        color: "bg-kubbo-green",
-    },
-    {
-        title: "Tecnología Propia",
-        description: "Integración nativa con Shopify, WooCommerce, VTEX y los principales marketplaces.",
-        icon: Smartphone,
-        color: "bg-kubbo-violet",
-    },
-    {
-        title: "Red de Transporte",
-        description: "Conectamos con las mejores transportistas nacionales e internacionales.",
-        icon: Globe,
-        color: "bg-orange-500",
-    },
-    {
-        title: "Seguridad Total",
-        description: "Tus productos están protegidos con la mejor infraestructura y seguros del mercado.",
-        icon: Shield,
-        color: "bg-indigo-500",
-    },
-    {
-        title: "Logística Inversa",
-        description: "Gestionamos cambios y devoluciones de manera ágil para mejorar el trust.",
-        icon: Truck,
-        color: "bg-rose-500",
-    },
-];
+export const Features = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
+    const { t } = useTranslation();
 
-export const Features = () => {
+    const features = [
+        {
+            title: t('features.f1_title'),
+            description: t('features.f1_desc'),
+            icon: Smartphone,
+            color: "bg-blue-500",
+        },
+        {
+            title: t('features.f2_title'),
+            description: t('features.f2_desc'),
+            icon: Box,
+            color: "bg-kubbo-green",
+        },
+        {
+            title: t('features.f3_title'),
+            description: t('features.f3_desc'),
+            icon: Globe,
+            color: "bg-orange-500",
+        },
+        {
+            title: t('features.f4_title'),
+            description: t('features.f4_desc'),
+            icon: Zap,
+            color: "bg-indigo-500",
+        },
+        {
+            title: t('features.f5_title'),
+            description: t('features.f5_desc'),
+            icon: Truck,
+            color: "bg-rose-500",
+        },
+        {
+            title: t('features.f6_title'),
+            description: t('features.f6_desc'),
+            icon: Shield,
+            color: "bg-indigo-500",
+        },
+    ];
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.8,
+                ease: [0.22, 1, 0.36, 1] as any
+            }
+        }
+    };
+
     return (
-        <section id="features" className="py-24 bg-white">
+        <section id="features" className="py-24 bg-transparent">
             <div className="container mx-auto px-6">
-                <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-                    <h2 className="text-sm font-bold tracking-widest text-kubbo-violet uppercase">Nuestros Servicios</h2>
-                    <h3 className="text-4xl md:text-5xl font-bold text-kubbo-dark leading-tight">
-                        Todo lo que necesitás para que tu <span className="text-kubbo-green">logística vuele</span>
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    viewport={{ once: true }}
+                    className="text-center max-w-4xl mx-auto mb-20 space-y-6"
+                >
+                    <div className="space-y-2">
+                        <h2 className="text-sm font-bold tracking-[0.4em] text-kubbo-green uppercase">{t('features.label')}</h2>
+                        <div className="w-12 h-[1px] bg-kubbo-green mx-auto opacity-50" />
+                    </div>
+                    <h3 className="text-4xl md:text-6xl font-light tracking-tight text-foreground leading-tight">
+                        {t('features.title')} <span className="text-kubbo-green font-normal">{t('features.titleAccent')}</span>
                     </h3>
-                    <p className="text-lg text-slate-500">
-                        Una solución integral diseñada para marcas que quieren escalar sin límites.
+                    <p className="text-xl md:text-2xl text-foreground/50 font-light max-w-2xl mx-auto leading-relaxed">
+                        {t('features.desc')}
                     </p>
-                </div>
+                </motion.div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
                     {features.map((feature, index) => (
-                        <div
+                        <motion.div
                             key={index}
-                            className="p-8 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-kubbo-violet/10 transition-all duration-300 group"
+                            variants={itemVariants}
+                            className="p-8 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:bg-card hover:shadow-xl hover:border-kubbo-green/20 transition-[background-color,border-color,box-shadow] duration-300 group"
                         >
-                            <div className={`w-14 h-14 ${feature.color}/10 rounded-xl flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform`}>
+                            <div className={`w-14 h-14 ${feature.color}/10 rounded-xl flex items-center justify-center text-white mb-8 group-hover:scale-110 transition-transform`}>
                                 <feature.icon className={`w-7 h-7 ${feature.color.replace('bg-', 'text-')}`} />
                             </div>
-                            <h4 className="text-xl font-bold text-kubbo-dark mb-3 leading-tight">{feature.title}</h4>
-                            <p className="text-slate-500 leading-relaxed">{feature.description}</p>
-                        </div>
+                            <h4 className="text-2xl font-light text-foreground mb-4 leading-tight group-hover:text-kubbo-green transition-colors">{feature.title}</h4>
+                            <p className="text-lg text-foreground/50 font-light leading-relaxed mb-8">{feature.description}</p>
+                            <Button
+                                onClick={onOpenPopup}
+                                className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-8 h-12 font-bold border-none"
+                            >
+                                {t('nav.start')}
+                            </Button>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );
