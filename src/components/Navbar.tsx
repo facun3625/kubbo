@@ -62,7 +62,7 @@ export const Navbar = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
             }}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity z-10"
           >
-            <span className="text-2xl font-bold tracking-tight text-[#204783] dark:text-white transition-colors duration-500 lowercase">
+            <span className="text-2xl font-bold tracking-tight text-[#204783] dark:text-kubbo-green transition-colors duration-500 lowercase">
               kubbo
             </span>
           </button>
