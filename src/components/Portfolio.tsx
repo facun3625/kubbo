@@ -39,27 +39,27 @@ const projects = [
         titleKey: 'portfolio.p4_title',
         categoryKey: 'portfolio.p4_category',
         descKey: 'portfolio.p4_desc',
-        detailKey: 'portfolio.p4_desc',
+        detailKey: 'portfolio.p4_detail',
         techKey: 'portfolio.p4_tech',
-        image: 'https://images.unsplash.com/photo-1586528116311-ad86d644d67e?auto=format&fit=crop&q=80',
+        image: '/lsf.png',
     },
     {
         id: 5,
         titleKey: 'portfolio.p5_title',
         categoryKey: 'portfolio.p5_category',
         descKey: 'portfolio.p5_desc',
-        detailKey: 'portfolio.p5_desc',
+        detailKey: 'portfolio.p5_detail',
         techKey: 'portfolio.p5_tech',
-        image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80',
+        image: '/eureka.png',
     },
     {
         id: 6,
         titleKey: 'portfolio.p6_title',
         categoryKey: 'portfolio.p6_category',
         descKey: 'portfolio.p6_desc',
-        detailKey: 'portfolio.p6_desc',
+        detailKey: 'portfolio.p6_detail',
         techKey: 'portfolio.p6_tech',
-        image: 'https://images.unsplash.com/photo-1576091160550-217359f4ecf8?auto=format&fit=crop&q=80',
+        image: '/est.png',
     }
 ];
 
