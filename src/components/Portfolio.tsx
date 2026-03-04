@@ -107,7 +107,7 @@ export const Portfolio = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
                     isOpen={!!selectedProject}
                     project={selectedProject}
                     onClose={() => setSelectedProject(null)}
-                    onOpenConsultation={onOpenPopup}
+                    onOpenConsultation={() => onOpenPopup()}
                 />
             )}
 
@@ -184,7 +184,7 @@ export const Portfolio = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
                     className="mt-24 text-center"
                 >
                     <Button
-                        onClick={onOpenPopup}
+                        onClick={() => onOpenPopup()}
                         size="lg"
                         className="bg-kubbo-dark text-white dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-10 h-16 text-lg font-medium rounded-full transition-all duration-500 border-none lowercase"
                     >

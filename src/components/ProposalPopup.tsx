@@ -7,6 +7,7 @@ import { Input } from "./ui/input";
 interface ProposalPopupProps {
     isOpen: boolean;
     onClose: () => void;
+    initialServiceId?: string | null;
 }
 
 const SERVICES = [
@@ -51,7 +52,7 @@ const URGENCY_OPTIONS = [
     { label: "Necesito empezar en las próximas semanas", emoji: "🚀" },
 ];
 
-export const ProposalPopup = ({ isOpen, onClose }: ProposalPopupProps) => {
+export const ProposalPopup = ({ isOpen, onClose, initialServiceId }: ProposalPopupProps) => {
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -66,12 +67,24 @@ export const ProposalPopup = ({ isOpen, onClose }: ProposalPopupProps) => {
 
     useEffect(() => {
         if (isOpen) {
-            setStep(1);
+            if (initialServiceId) {
+                setStep(2);
+                setFormData({
+                    service: initialServiceId,
+                    detail: "",
+                    urgency: "",
+                    name: "",
+                    company: "",
+                    whatsapp: ""
+                });
+            } else {
+                setStep(1);
+                setFormData({ service: "", detail: "", urgency: "", name: "", company: "", whatsapp: "" });
+            }
             setIsSuccess(false);
             setIsSubmitting(false);
-            setFormData({ service: "", detail: "", urgency: "", name: "", company: "", whatsapp: "" });
         }
-    }, [isOpen]);
+    }, [isOpen, initialServiceId]);
 
     const handleNext = () => setStep((s) => s + 1);
     const handleBack = () => setStep((s) => s - 1);

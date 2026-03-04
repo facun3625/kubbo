@@ -19,7 +19,7 @@ export const ProjectDetailPopup = ({ project, isOpen, onClose, onOpenConsultatio
 
     return (
         <AnimatePresence>
-            <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-[250] flex items-start justify-center p-4 pt-28 md:pt-32">
                 {/* Backdrop */}
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -34,7 +34,7 @@ export const ProjectDetailPopup = ({ project, isOpen, onClose, onOpenConsultatio
                     initial={{ opacity: 0, scale: 0.95, y: 30 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 30 }}
-                    className="relative w-full max-w-4xl bg-card border border-border shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2.5rem] overflow-hidden z-10 max-h-[90vh] flex flex-col"
+                    className="relative w-full max-w-4xl bg-card border border-border shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2.5rem] overflow-hidden z-10 max-h-[calc(100vh-160px)] flex flex-col"
                 >
                     {/* Close button */}
                     <button

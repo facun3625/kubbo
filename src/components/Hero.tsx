@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { useTranslation } from "react-i18next";
 import { motion, animate } from "framer-motion";
 
-export const Hero = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
+export const Hero = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => void }) => {
     const { t } = useTranslation();
 
     const scrollToSection = (id: string) => {
@@ -58,7 +58,7 @@ export const Hero = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
 
                     <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 pt-8">
                         <Button
-                            onClick={onOpenPopup}
+                            onClick={() => onOpenPopup()}
                             size="lg"
                             className="bg-kubbo-dark text-white dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-10 h-16 text-lg font-medium rounded-full transition-all duration-500 shadow-2xl shadow-white/5 border-none"
                         >

@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export const Navbar = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
+export const Navbar = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();

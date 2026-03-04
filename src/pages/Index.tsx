@@ -133,7 +133,7 @@ const Footer = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:row items-center justify-between gap-6 text-sm text-slate-500">
-          <p>{t('footer.rights')}</p>
+          <p>{t('footer.rights')} <span className="opacity-20">v1.1</span></p>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a>
             <a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a>
@@ -147,13 +147,21 @@ const Footer = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
 const Index = () => {
   const { t } = useTranslation();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
 
-  const onOpenPopup = () => setIsPopupOpen(true);
+  const onOpenPopup = (serviceId?: string) => {
+    setSelectedServiceId(serviceId || null);
+    setIsPopupOpen(true);
+  };
 
   return (
     <main className="relative min-h-screen font-body selection:bg-kubbo-green/20 selection:text-kubbo-green bg-background text-foreground transition-colors duration-500">
-      <Navbar onOpenPopup={onOpenPopup} />
-      <ProposalPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+      <Navbar onOpenPopup={() => onOpenPopup()} />
+      <ProposalPopup
+        isOpen={isPopupOpen}
+        onClose={() => setIsPopupOpen(false)}
+        initialServiceId={selectedServiceId}
+      />
 
       {/* Global Background Layer */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -166,7 +174,7 @@ const Index = () => {
       </div>
 
       <div className="relative z-10">
-        <Hero onOpenPopup={onOpenPopup} />
+        <Hero onOpenPopup={() => onOpenPopup()} />
         <About />
         <Features onOpenPopup={onOpenPopup} />
         <Portfolio onOpenPopup={onOpenPopup} />
@@ -189,7 +197,7 @@ const Index = () => {
             </p>
             <div className="flex items-center justify-center">
               <Button
-                onClick={onOpenPopup}
+                onClick={() => onOpenPopup()}
                 size="lg"
                 className="bg-white text-kubbo-green hover:bg-kubbo-dark hover:text-white dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-10 h-16 text-xl font-bold shadow-2xl transition-all duration-500"
               >
@@ -199,7 +207,7 @@ const Index = () => {
           </div>
         </section>
 
-        <Footer onOpenPopup={onOpenPopup} />
+        <Footer onOpenPopup={() => onOpenPopup()} />
       </div>
     </main>
   );

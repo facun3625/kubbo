@@ -6,7 +6,7 @@ const technologies = [
     "React", "Angular", "Next.js", "PostgreSQL", "MongoDB", "PHP", "Python", "HTML5", "CSS3", "Typescript", "Node.js", "Docker"
 ];
 
-export const TechStack = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
+export const TechStack = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => void }) => {
     const { t } = useTranslation();
 
     const containerVariants: Variants = {
@@ -73,7 +73,7 @@ export const TechStack = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
                     className="flex justify-center"
                 >
                     <Button
-                        onClick={onOpenPopup}
+                        onClick={() => onOpenPopup()}
                         className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-10 h-14 font-bold border-none shadow-xl"
                     >
                         {t('nav.start')}

@@ -3,41 +3,47 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Button } from "./ui/button";
 
-export const Features = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
+export const Features = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => void }) => {
     const { t } = useTranslation();
 
     const features = [
         {
+            id: "webapp",
             title: t('features.f1_title'),
             description: t('features.f1_desc'),
             icon: Smartphone,
             color: "bg-blue-500",
         },
         {
+            id: "excel",
             title: t('features.f2_title'),
             description: t('features.f2_desc'),
             icon: Box,
             color: "bg-kubbo-green",
         },
         {
+            id: "sitio",
             title: t('features.f3_title'),
             description: t('features.f3_desc'),
             icon: Globe,
             color: "bg-orange-500",
         },
         {
+            id: "mobile",
             title: t('features.f4_title'),
             description: t('features.f4_desc'),
             icon: Zap,
             color: "bg-indigo-500",
         },
         {
+            id: "legado",
             title: t('features.f5_title'),
             description: t('features.f5_desc'),
             icon: Truck,
             color: "bg-rose-500",
         },
         {
+            id: "ia",
             title: t('features.f6_title'),
             description: t('features.f6_desc'),
             icon: Shield,
@@ -109,7 +115,7 @@ export const Features = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
                             <h4 className="text-2xl font-light text-foreground mb-4 leading-tight group-hover:text-kubbo-green transition-colors">{feature.title}</h4>
                             <p className="text-lg text-foreground/50 font-light leading-relaxed mb-8">{feature.description}</p>
                             <Button
-                                onClick={onOpenPopup}
+                                onClick={() => onOpenPopup(feature.id)}
                                 className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-8 h-12 font-bold border-none"
                             >
                                 {t('nav.start')}
