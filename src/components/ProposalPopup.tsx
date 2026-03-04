@@ -83,12 +83,43 @@ export const ProposalPopup = ({ isOpen, onClose }: ProposalPopupProps) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        console.log("Form Data:", formData);
-        setTimeout(() => {
-            setIsSubmitting(false);
+
+        const serviceLabel = SERVICES.find(s => s.id === formData.service)?.label || formData.service;
+
+        try {
+            const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "api-key": import.meta.env.VITE_BREVO_API_KEY,
+                },
+                body: JSON.stringify({
+                    sender: { name: "Kubbo Sitio Web", email: "info@kubbo.com.ar" },
+                    to: [{ email: "info@kubbo.com.ar", name: "Kubbo" }],
+                    subject: `Nueva solicitud de propuesta — ${serviceLabel}`,
+                    htmlContent: `
+                        <h2>Nueva solicitud de propuesta 🚀</h2>
+                        <table cellpadding="8" style="border-collapse:collapse;width:100%">
+                            <tr><td><strong>Servicio</strong></td><td>${serviceLabel}</td></tr>
+                            <tr><td><strong>Detalle</strong></td><td>${formData.detail}</td></tr>
+                            <tr><td><strong>Urgencia</strong></td><td>${formData.urgency}</td></tr>
+                            <tr><td><strong>Nombre</strong></td><td>${formData.name}</td></tr>
+                            <tr><td><strong>Empresa</strong></td><td>${formData.company}</td></tr>
+                            <tr><td><strong>WhatsApp</strong></td><td>${formData.whatsapp}</td></tr>
+                        </table>
+                    `,
+                }),
+            });
+
+            if (!response.ok) throw new Error("Error al enviar");
             setIsSuccess(true);
-            setTimeout(() => onClose(), 3000);
-        }, 1500);
+            setTimeout(() => onClose(), 3500);
+        } catch (err) {
+            console.error("Error enviando propuesta:", err);
+            alert("Hubo un error al enviar. Por favor contactanos por WhatsApp.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const stepVariants = {

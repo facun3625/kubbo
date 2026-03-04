@@ -12,6 +12,34 @@ import { ProposalPopup } from "@/components/ProposalPopup";
 
 const Footer = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
   const { t } = useTranslation();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterSuccess, setNewsletterSuccess] = useState(false);
+
+  const handleNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail) return;
+    setNewsletterLoading(true);
+    try {
+      const res = await fetch("https://api.brevo.com/v3/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": import.meta.env.VITE_BREVO_API_KEY,
+        },
+        body: JSON.stringify({
+          email: newsletterEmail,
+          updateEnabled: true,
+        }),
+      });
+      if (!res.ok && res.status !== 204) throw new Error();
+      setNewsletterSuccess(true);
+    } catch {
+      alert("Error al suscribirse. Intentá de nuevo.");
+    } finally {
+      setNewsletterLoading(false);
+    }
+  };
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -80,16 +108,27 @@ const Footer = ({ onOpenPopup }: { onOpenPopup: () => void }) => {
           <div className="space-y-6">
             <h4 className="text-lg font-bold mb-6">{t('footer.newsletter')}</h4>
             <p className="text-slate-400 text-sm">{t('footer.newsletterDesc')}</p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder={t('footer.emailPlaceholder')}
-                className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-kubbo-green/50"
-              />
-              <Button className="bg-kubbo-green hover:bg-kubbo-green/90 text-white">
-                <MoveRight className="w-5 h-5" />
-              </Button>
-            </div>
+            {newsletterSuccess ? (
+              <p className="text-kubbo-green font-medium text-sm">✅ ¡Suscripto! Gracias por unirte.</p>
+            ) : (
+              <form onSubmit={handleNewsletter} className="flex gap-2">
+                <input
+                  type="email"
+                  required
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  placeholder={t('footer.emailPlaceholder')}
+                  className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 flex-1 focus:outline-none focus:ring-2 focus:ring-kubbo-green/50"
+                />
+                <Button type="submit" disabled={newsletterLoading} className="bg-kubbo-green hover:bg-kubbo-green/90 text-white">
+                  {newsletterLoading ? (
+                    <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <MoveRight className="w-5 h-5" />
+                  )}
+                </Button>
+              </form>
+            )}
           </div>
         </div>
 
