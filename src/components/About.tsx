@@ -7,32 +7,34 @@ export const About = () => {
     const { t } = useTranslation();
 
     return (
-        <section id="about" className="relative min-h-screen flex flex-col md:flex-row bg-transparent overflow-hidden">
-            {/* Left Column - Image */}
+        <section id="about" className="relative min-h-screen flex items-center overflow-hidden">
+            {/* Full-width background image */}
             <motion.div
-                initial={{ opacity: 0, x: -60, scale: 0.96 }}
-                whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, scale: 1.05 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
                 viewport={{ once: true }}
-                className="relative w-full md:w-1/2 h-[50vh] md:h-screen"
+                className="absolute inset-0 z-0"
             >
                 <img
                     src="/quienes.png"
                     alt="Equipo Kubbo"
-                    className="absolute inset-0 w-full h-full object-cover opacity-80 dark:opacity-70 transition-opacity duration-1000"
+                    className="w-full h-full object-cover opacity-80 dark:opacity-60"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent md:bg-gradient-to-b md:from-transparent md:to-transparent" />
+                {/* Gradient: transparent on left (image shows), dark on right (text readable) */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/60 to-background" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent md:hidden" />
             </motion.div>
 
-            {/* Right Column - Content */}
-            <motion.div
-                initial={{ opacity: 0, y: 40, scale: 0.96 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-24 relative z-10"
-            >
-                <div className="max-w-xl space-y-12">
+            {/* Content overlaid on the right half */}
+            <div className="relative z-10 w-full container mx-auto px-6 flex justify-end">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                    viewport={{ once: true, margin: "0px" }}
+                    className="w-full md:w-1/2 py-24 md:py-32 space-y-12"
+                >
                     <div className="space-y-6">
                         <div className="space-y-2">
                             <h2 className="text-sm font-bold tracking-[0.4em] text-kubbo-green uppercase">{t('nav.about')}</h2>
@@ -43,12 +45,12 @@ export const About = () => {
                         </h3>
 
                         <p
-                            className="text-lg md:text-xl text-foreground/50 leading-relaxed font-light"
+                            className="text-lg md:text-xl text-foreground/70 leading-relaxed font-light"
                             dangerouslySetInnerHTML={{ __html: t('about.desc1') }}
                         />
 
                         <p
-                            className="text-lg md:text-xl text-foreground/50 leading-relaxed font-light"
+                            className="text-lg md:text-xl text-foreground/70 leading-relaxed font-light"
                             dangerouslySetInnerHTML={{ __html: t('about.desc2') }}
                         />
 
@@ -103,8 +105,8 @@ export const About = () => {
                             <p className="text-[10px] font-bold tracking-[0.3em] uppercase text-foreground/30">{t('about.custom_systems')}</p>
                         </div>
                     </div>
-                </div>
-            </motion.div>
+                </motion.div>
+            </div>
         </section>
     );
 };
