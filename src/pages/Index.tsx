@@ -199,7 +199,7 @@ const Index = () => {
               <Button
                 onClick={() => onOpenPopup()}
                 size="lg"
-                className="bg-white text-kubbo-green hover:bg-kubbo-dark hover:text-white dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-10 h-16 text-xl font-bold shadow-2xl transition-all duration-500"
+                className="bg-white text-kubbo-green hover:bg-kubbo-dark hover:text-white dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-8 md:px-10 h-12 md:h-16 text-base md:text-xl font-bold shadow-2xl transition-all duration-500"
               >
                 {t('cta.demo')}
               </Button>

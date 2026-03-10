@@ -74,7 +74,7 @@ export const TechStack = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) =
                 >
                     <Button
                         onClick={() => onOpenPopup()}
-                        className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-10 h-14 font-bold border-none shadow-xl"
+                        className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-8 md:px-10 h-12 md:h-14 font-bold border-none shadow-xl text-sm md:text-base"
                     >
                         {t('nav.start')}
                     </Button>

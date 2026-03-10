@@ -104,7 +104,7 @@ i18n
                         cta: "Solicitar propuesta",
                     },
                     cta: {
-                        title: "¿Listo para llevar tu logística al siguiente nivel?",
+                        title: "¿Listo para llevar tu negocio al siguiente nivel?",
                         desc: "Unite a las marcas que están creciendo más rápido con Kubbo. Sin contratos complicados, tecnología de punta y el mejor equipo.",
                         demo: "Solicitar propuesta",
                         rates: "Ver Tarifas"
@@ -253,7 +253,7 @@ i18n
                         cta: "Request Proposal",
                     },
                     cta: {
-                        title: "Ready to take your logistics to the next level?",
+                        title: "Ready to take your business to the next level?",
                         desc: "Join the brands that are growing fastest with Kubbo. No complicated contracts, cutting-edge technology, and the best team.",
                         demo: "Request Proposal",
                         rates: "View Rates"

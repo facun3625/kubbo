@@ -60,7 +60,7 @@ export const Hero = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => voi
                         <Button
                             onClick={() => onOpenPopup()}
                             size="lg"
-                            className="bg-kubbo-dark text-white dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-10 h-16 text-lg font-medium rounded-full transition-all duration-500 shadow-2xl shadow-white/5 border-none"
+                            className="bg-kubbo-dark text-white dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark px-8 md:px-10 h-12 md:h-16 text-sm md:text-lg font-medium rounded-full transition-all duration-500 shadow-2xl shadow-white/5 border-none"
                         >
                             {t('hero.cta')}
                         </Button>

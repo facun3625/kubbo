@@ -107,8 +107,8 @@ export const Navbar = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => v
             </div>
 
             <Button
-              onClick={onOpenPopup}
-              className="hidden sm:flex bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-8 font-bold border-none"
+              onClick={() => onOpenPopup()}
+              className="hidden sm:flex bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-6 md:px-8 font-bold border-none text-sm"
             >
               {t('nav.start')}
             </Button>
@@ -178,7 +178,7 @@ export const Navbar = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) => v
                   setIsMobileMenuOpen(false);
                   onOpenPopup();
                 }}
-                className="w-full bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark font-bold rounded-full border-none"
+                className="w-full bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark font-bold rounded-full border-none h-12"
               >
                 {t('nav.start')}
               </Button>

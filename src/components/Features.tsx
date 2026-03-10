@@ -116,7 +116,7 @@ export const Features = ({ onOpenPopup }: { onOpenPopup: (serviceId?: string) =>
                             <p className="text-lg text-foreground/50 font-light leading-relaxed mb-8">{feature.description}</p>
                             <Button
                                 onClick={() => onOpenPopup(feature.id)}
-                                className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-8 h-12 font-bold border-none"
+                                className="bg-foreground text-background dark:bg-white dark:text-kubbo-dark hover:bg-kubbo-green hover:text-kubbo-dark dark:hover:bg-kubbo-green dark:hover:text-kubbo-dark transition-all duration-500 rounded-full px-6 md:px-8 h-10 md:h-12 font-bold border-none text-sm"
                             >
                                 {t('nav.start')}
                             </Button>

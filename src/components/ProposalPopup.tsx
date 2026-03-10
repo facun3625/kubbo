@@ -292,7 +292,7 @@ export const ProposalPopup = ({ isOpen, onClose, initialServiceId }: ProposalPop
                                                     </div>
                                                 </div>
                                                 <div className="pt-4 flex flex-col gap-3">
-                                                    <Button disabled={isSubmitting} className="bg-kubbo-green hover:bg-kubbo-green/90 text-kubbo-dark font-bold h-14 rounded-xl text-base shadow-xl shadow-kubbo-green/20">
+                                                    <Button disabled={isSubmitting} className="bg-kubbo-green hover:bg-kubbo-green/90 text-kubbo-dark font-bold h-12 md:h-14 rounded-xl text-sm md:text-base shadow-xl shadow-kubbo-green/20">
                                                         {isSubmitting ? (
                                                             <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-5 h-5 border-2 border-kubbo-dark border-t-transparent rounded-full" />
                                                         ) : "Enviar solicitud"}
