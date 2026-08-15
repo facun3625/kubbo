@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Tienda Online + Odoo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --ink:#211826;
+    --muted:#6E6473;
+    --paper:#FCF8FA;
+    --surface:#FFFFFF;
+    --accent:#D93E7E;
+    --accent-deep:#A31E58;
+    --accent-soft:#FBE6EF;
+    --line:#EEDDE6;
+    --line-strong:#E2C9D6;
+    --gold:#B0843C;
+    --ok:#2E9E6B;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  .doc{max-width:820px;margin:0 auto;}
+
+  /* ---- shared type ---- */
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.12;text-wrap:balance;margin:0;}
+  .eyebrow{
+    font-family:var(--sans);font-size:.72rem;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent-deep);
+  }
+  p{margin:0 0 1rem;}
+  .lead{font-size:1.12rem;color:#453A4B;}
+  a{color:var(--accent-deep);}
+
+  /* ---- cover ---- */
+  .cover{
+    background:linear-gradient(150deg,#B31E5D 0%,#D93E7E 55%,#E8739F 100%);
+    color:#fff;padding:clamp(2.4rem,7vw,4.5rem) 0;
+    position:relative;overflow:hidden;
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    width:100vw;margin-left:calc(50% - 50vw);
+  }
+  .cover-inner{max-width:820px;margin:0 auto;padding:0 clamp(1.6rem,6vw,3.6rem);position:relative;}
+  .cover::after{
+    content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;
+    border:2px solid rgba(255,255,255,.18);border-radius:50%;
+  }
+  .cover::before{
+    content:"";position:absolute;right:-40px;bottom:-160px;width:320px;height:320px;
+    border:2px solid rgba(255,255,255,.12);border-radius:50%;
+  }
+  .cover .kicker{font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.85);}
+  .cover h1{color:#fff;font-size:clamp(2.4rem,7vw,3.9rem);margin:1.1rem 0 0;max-width:14ch;}
+  .cover .tagline{font-size:1.15rem;color:rgba(255,255,255,.92);max-width:46ch;margin-top:1.2rem;position:relative;}
+  .cover .chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:2rem;position:relative;}
+  .cover .chip{
+    font-size:.82rem;font-weight:600;background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.28);padding:.4rem .9rem;border-radius:999px;backdrop-filter:blur(2px);
+  }
+
+  /* ---- sections ---- */
+  section{padding:clamp(2rem,5vw,3.2rem) clamp(1.6rem,6vw,3.6rem);}
+  section + section{border-top:1px solid var(--line);}
+  .sec-head{margin-bottom:1.6rem;}
+  .sec-head h2{font-size:clamp(1.6rem,4.5vw,2.2rem);margin-top:.5rem;}
+  .sec-head .sub{color:var(--muted);margin-top:.6rem;max-width:56ch;}
+
+  /* ---- feature grid ---- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:1.25rem 1.3rem;break-inside:avoid;
+  }
+  .card h3{font-family:var(--sans);font-size:1.02rem;font-weight:700;letter-spacing:-.005em;margin-bottom:.5rem;}
+  .card .tag{
+    display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--accent-deep);background:var(--accent-soft);padding:.22rem .55rem;border-radius:6px;margin-bottom:.7rem;
+  }
+  ul.checks{list-style:none;margin:.2rem 0 0;padding:0;}
+  ul.checks li{position:relative;padding-left:1.5rem;margin:.42rem 0;font-size:.92rem;color:#40384a;line-height:1.45;}
+  ul.checks li::before{
+    content:"";position:absolute;left:0;top:.34em;width:.7rem;height:.7rem;
+    background:var(--accent);-webkit-mask:var(--check) center/contain no-repeat;mask:var(--check) center/contain no-repeat;
+  }
+  :root{--check:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='black' d='M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z'/></svg>");}
+
+  /* ---- odoo flow ---- */
+  .flow{display:flex;flex-direction:column;gap:.85rem;counter-reset:fstep;}
+  .fstep{
+    display:grid;grid-template-columns:auto 1fr;gap:0 1.1rem;align-items:start;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:1.15rem 1.3rem;break-inside:avoid;
+  }
+  .fstep .n{
+    counter-increment:fstep;grid-row:1/span 2;width:2.3rem;height:2.3rem;flex:none;border-radius:50%;
+    background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-size:1.2rem;font-weight:700;
+  }
+  .fstep .n::before{content:counter(fstep);}
+  .fstep h3{font-family:var(--sans);font-size:1rem;font-weight:700;align-self:center;}
+  .fstep p{grid-column:2;margin:.35rem 0 0;font-size:.93rem;color:#443c4c;}
+
+  /* ---- callout ---- */
+  .callout{
+    background:var(--accent-soft);border:1px solid var(--line-strong);border-left:4px solid var(--accent);
+    border-radius:12px;padding:1.1rem 1.3rem;margin-top:1.4rem;break-inside:avoid;
+  }
+  .callout p{margin:0;font-size:.95rem;color:#4a2338;}
+  .callout b{color:var(--accent-deep);}
+
+  /* two-col text */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;}
+  .two h3{font-family:var(--sans);font-size:1.05rem;font-weight:700;margin-bottom:.5rem;}
+  .two p{font-size:.94rem;color:#443c4c;}
+
+  /* pill row */
+  .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.4rem;}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.1rem;break-inside:avoid;}
+  .stat .big{font-family:var(--serif);font-size:1.7rem;color:var(--accent-deep);line-height:1;}
+  .stat .lbl{font-size:.85rem;color:var(--muted);margin-top:.5rem;}
+
+  /* spec table */
+  table.spec{width:100%;border-collapse:collapse;font-size:.92rem;}
+  table.spec th,table.spec td{text-align:left;padding:.7rem .8rem;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.spec th{width:34%;font-weight:700;color:var(--ink);}
+  table.spec td{color:#443c4c;}
+  table.spec tr:last-child th,table.spec tr:last-child td{border-bottom:none;}
+
+  /* closing */
+  .closing{background:var(--ink);color:#fff;text-align:center;}
+  .closing h2{color:#fff;font-size:clamp(1.7rem,5vw,2.4rem);}
+  .closing p{color:rgba(255,255,255,.8);max-width:48ch;margin:1rem auto 0;}
+  .closing .mark{font-family:var(--serif);color:var(--accent);font-size:1.1rem;letter-spacing:.02em;margin-top:1.8rem;}
+
+  footer{padding:1.4rem;text-align:center;color:var(--muted);font-size:.78rem;}
+
+  @media (max-width:640px){
+    .grid,.two,.stat-row{grid-template-columns:1fr;}
+  }
+  .action-row{position:fixed;top:1rem;right:1rem;z-index:50;display:flex;gap:.6rem;}
+  .action-btn{
+    background:var(--surface);color:var(--accent-deep);
+    border:1px solid var(--line-strong);border-radius:999px;
+    padding:.55rem 1.05rem;font-family:var(--sans);font-weight:700;font-size:.85rem;
+    cursor:pointer;box-shadow:0 6px 18px rgba(163,30,88,.18);transition:background .15s;
+  }
+  .action-btn:hover{background:var(--accent-soft);}
+  @page{margin:12mm;}
+  @page cover{margin:0;}
+  @media print{
+    .action-row{display:none!important;}
+    /* Portada a sangre completa, llenando toda la primera hoja; el resto
+       fluye sin saltos forzados (que dejaban medias hojas en blanco). */
+    .cover{page:cover;min-height:100vh;display:flex;flex-direction:column;justify-content:center;break-after:page;}
+    .card,.fstep,.callout,.stat,.two > div,.sec-head,.closing{break-inside:avoid;}
+    table.spec tr{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="action-row">
+  <button class="action-btn" id="shareBtn" onclick="shareLink()">🔗 Compartir link</button>
+  <button class="action-btn" onclick="window.print()">⬇ Descargar PDF</button>
+</div>
+<script>
+  function shareLink(){
+    var url = window.top && window.top.location ? window.top.location.href : window.location.href;
+    var btn = document.getElementById('shareBtn');
+    if(navigator.share){
+      navigator.share({title:document.title, url:url}).catch(function(){});
+      return;
+    }
+    navigator.clipboard.writeText(url).then(function(){
+      var original = btn.textContent;
+      btn.textContent = '✓ Link copiado';
+      setTimeout(function(){ btn.textContent = original; }, 1800);
+    });
+  }
+</script>
+
+<div class="doc">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-inner">
+      <div class="kicker">Plataforma de comercio electrónico</div>
+      <h1>Tu local, abierto las 24 horas.</h1>
+      <p class="tagline">Mientras la persiana está baja, tu tienda sigue vendiendo — con tu catálogo y tu stock reales, conectada en tiempo real a tu inventario de Odoo. Autoadministrable, multi-franquicia y sin comisiones de plataforma sobre tus ventas.</p>
+      <div class="chips">
+        <span class="chip">Vende las 24 h, los 365 días</span>
+        <span class="chip">0% de comisión por venta</span>
+        <span class="chip">Stock en vivo desde Odoo</span>
+        <span class="chip">Sin sobreventa, ni un fin de semana entero</span>
+        <span class="chip">Panel con estadísticas y auditoría</span>
+        <span class="chip">Puntos · Mailing · Telegram</span>
+        <span class="chip">Multi-franquicia</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EL LOCAL NUNCA CIERRA -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Por qué vender online, ahora</div>
+      <h2>El local nunca cierra.</h2>
+      <p class="sub">Tu vidriera física cierra a las 20&nbsp;h. La decisión de compra de tu cliente, no.</p>
+    </div>
+    <p class="lead">Cada persona que piensa "lo quiero" a las once de la noche, un domingo, o camino al trabajo, hoy tiene que esperar a que abras — y en ese hueco, la compra muchas veces se enfría o se va a otro lado. Con la tienda online esa venta no se pierde: se cierra en el segundo exacto en que el cliente se decide.</p>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">Siempre abierta</span>
+        <h3>24 horas, los 365 días</h3>
+        <ul class="checks">
+          <li>El cliente compra cuando quiere, no cuando vos abrís</li>
+          <li>Fines de semana, feriados, madrugadas: la caja nunca cierra</li>
+          <li>Ninguna venta se pierde por horario comercial</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Impulso + cercanía</span>
+        <h3>"Lo compro ya, lo busco mañana"</h3>
+        <ul class="checks">
+          <li>Al ser tu local y no un marketplace anónimo, el cliente sabe que está cerca</li>
+          <li>Compra de impulso esta noche, retira o recibe mañana</li>
+          <li>Esa cercanía es tu ventaja frente a cualquier plataforma genérica</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Cero comisiones</span>
+        <h3>Cada venta es 100% tuya</h3>
+        <ul class="checks">
+          <li>No hay porcentaje que regalarle a un marketplace por operación</li>
+          <li>Ni por vender de noche, ni un feriado, ni nunca</li>
+          <li>Pagás tu servidor una vez — no un peaje por cada venta</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Empuje extra</span>
+        <h3>Descuentos que cierran la venta</h3>
+        <ul class="checks">
+          <li>Cupones y descuentos por medio de pago, configurables por vos</li>
+          <li>Convierten un "lo pienso" en una compra confirmada, ahí mismo</li>
+          <li>Ideales para vaciar stock, lanzar productos o premiar la primera compra</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUÉ ES -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">La propuesta</div>
+      <h2>Una tienda propia, no un alquiler.</h2>
+    </div>
+    <p class="lead">Es una tienda online profesional que corre en tu propio servidor y se conecta directo a tu Odoo. Vendés por internet con tu catálogo y tu stock reales, sin depender de un marketplace ni pagar un porcentaje por cada venta.</p>
+    <p>Todo lo que el cliente ve —productos, precios, disponibilidad— sale en vivo de tu inventario. Y todo lo que vos necesitás administrar —ventas, pedidos, clientes, promociones, comunicación— se maneja desde un panel propio, pensado para que lo use cualquier persona del equipo sin conocimientos técnicos.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="big">0%</div><div class="lbl">de comisión por venta: la plataforma es tuya.</div></div>
+      <div class="stat"><div class="big">Tiempo real</div><div class="lbl">catálogo y stock sincronizados con Odoo.</div></div>
+      <div class="stat"><div class="big">A medida</div><div class="lbl">tienda independiente, con la opción de personalizarla según tus requerimientos.</div></div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA CON ODOO -->
+  <section class="odoo-page">
+    <div class="sec-head">
+      <div class="eyebrow">El corazón del sistema</div>
+      <h2>Cómo funciona con Odoo</h2>
+      <p class="sub">La tienda no es una isla: es una extensión de tu Odoo. Se conecta por API y trabaja sobre tu inventario real, sin duplicar datos ni obligarte a cargar el catálogo dos veces.</p>
+    </div>
+
+    <div class="flow">
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Conectás tu Odoo</h3>
+        <p>Desde el panel cargás los datos de tu instancia (URL, base de datos, usuario y clave de API). Cada franquicia conecta la suya: la instalación arranca vacía y vos la enchufás a tu Odoo en minutos.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Catálogo y stock en vivo</h3>
+        <p>La tienda lee productos, precios, imágenes y disponibilidad directamente de Odoo. Lo que cambiás en Odoo aparece en la web — sin exportar, sin sincronizar a mano, sin catálogos desactualizados.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Alguien compra: el stock se reserva al instante</h3>
+        <p>En el segundo en que se confirma la compra, esa unidad queda <b>reservada en la propia tienda</b> — no depende de que nadie entre a Odoo. Si el sábado a la noche se vende la última unidad, el domingo a la mañana la web ya muestra que no queda, aunque no haya un alma mirando el sistema en todo el fin de semana. Se acabó vender dos veces lo mismo.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Se confirma el pago: recién ahí entra a Odoo</h3>
+        <p>Con <b>tarjeta</b> (Payway o Mercado Pago) el pago se aprueba al instante y el pedido pasa solo — nada de pasos manuales, y por ninguno de los dos se puede pagar en efectivo. Con <b>transferencia</b> o <b>contra entrega</b>, lo confirmás vos desde el panel cuando llega la plata — y en ese momento, no antes, se crea el cliente en Odoo (res.partner) y se genera la <b>orden de entrega reservada</b>, con la referencia del pedido web para cruzarlos al toque.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Tu equipo despacha, como siempre</h3>
+        <p>La orden aparece en la cola de transferencias de Odoo, igual que cualquier pedido. Tu equipo la valida al empaquetar — se respeta tu circuito y tus controles de siempre, nada se descuenta por sorpresa.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Se cierra el círculo, solo</h3>
+        <p>En el mismo instante en que tu equipo valida la entrega en Odoo, la tienda lo detecta y <b>libera la reserva</b> del paso 3 sola: el número que ve el próximo cliente queda exacto, sin que nadie tenga que tocar nada a mano. Si el pedido es de un cliente registrado, ahí mismo se le acreditan los puntos de fidelidad.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><b>Pensada para el fin de semana real.</b> El problema que resuelve esto no es teórico: una vidriera atendida por un solo local, sin nadie revisando Odoo sábado a la noche o domingo, es la situación en la que más se vende de más. La reserva de stock cubre exactamente ese hueco — funciona incluso si el equipo nunca abre Odoo en todo el fin de semana.</p>
+    </div>
+    <div class="callout">
+      <p><b>No necesitás el módulo de Ventas de Odoo.</b> Funciona solo con Inventario. La tienda es la fuente de verdad de tus ventas online y se apoya en Odoo para el stock y la logística — lo mejor de los dos mundos.</p>
+    </div>
+  </section>
+
+  <!-- CÓMO SE COBRA CON TARJETA -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Confianza y seguridad</div>
+      <h2>Cómo se cobra con tarjeta, sin arriesgar un dato</h2>
+      <p class="sub">El pago con tarjeta (Payway o Mercado Pago) está integrado directo en tu checkout — el cliente nunca sale de tu sitio, vos nunca ves ni guardás un número de tarjeta, y por ninguno de los dos se puede pagar en efectivo.</p>
+    </div>
+    <div class="flow">
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>La tarjeta se tokeniza en el navegador del cliente</h3>
+        <p>Los datos de la tarjeta viajan directo del navegador al gateway de pago, nunca a tu servidor. Lo que llega a la tienda es un token de un solo uso — inofensivo si alguien lo interceptara.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Se cobra al instante, con control antifraude</h3>
+        <p>La tienda usa ese token para cobrar en el momento, con los mismos controles de fraude que usa cualquier comercio serio. La respuesta (aprobado o rechazado) llega en segundos.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Aprobado: el pedido nace confirmado</h3>
+        <p>Sin esperar que nadie revise nada: el pedido queda pagado, reserva su stock y genera la orden en Odoo automáticamente, igual que el resto del flujo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FUNCIONES: TIENDA -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Funciones · Cara al cliente</div>
+      <h2>La experiencia de compra</h2>
+      <p class="sub">Una tienda rápida, moderna y pensada para vender, en cualquier dispositivo.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">Catálogo</span>
+        <h3>Vidriera siempre al día</h3>
+        <ul class="checks">
+          <li>Productos, precios e imágenes en vivo desde Odoo</li>
+          <li>Categorías con navegación lateral</li>
+          <li>Buscador integrado</li>
+          <li>Ampliación de imágenes en alta resolución</li>
+          <li>Slider principal y franja de anuncios editables desde el panel</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Carrito y checkout</span>
+        <h3>Comprar en pocos pasos</h3>
+        <ul class="checks">
+          <li>Carrito persistente que no se pierde</li>
+          <li>Checkout en dos columnas, ágil en celular y compu</li>
+          <li>"También te puede gustar": recomienda productos de la misma categoría</li>
+          <li>Cupones de descuento con reglas a medida</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Pagos</span>
+        <h3>Los medios que ya usás</h3>
+        <ul class="checks">
+          <li>Tarjeta con Mercado Pago o Payway: tokenización segura y aprobación al instante, sin pasos manuales ni efectivo</li>
+          <li>Transferencia con carga de comprobante</li>
+          <li>Pago contra entrega</li>
+          <li>Transferencia y contra entrega vienen habilitados por defecto desde la instalación</li>
+          <li>Cada medio se prende o apaga por separado desde el panel — vos elegís cuáles ofrecer</li>
+          <li>Descuento configurable por medio de pago</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Envíos</span>
+        <h3>Reglas a tu medida</h3>
+        <ul class="checks">
+          <li>Métodos de envío propios (envío, retiro en local, etc.)</li>
+          <li>Retiro en el local y envío a domicilio vienen habilitados por defecto desde la instalación</li>
+          <li>Con o sin dirección según el método</li>
+          <li>Costo por método y restricciones por medio de pago</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Stock agotado</span>
+        <h3>No perdés la venta</h3>
+        <ul class="checks">
+          <li>"Avisarme cuando haya stock" en productos agotados</li>
+          <li>Lista de interesados lista para reactivar la demanda</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Cuentas</span>
+        <h3>Clientes registrados</h3>
+        <ul class="checks">
+          <li>Registro y login propio, o con Google</li>
+          <li>Historial de pedidos en "Mi cuenta"</li>
+          <li>Saldo y canje de puntos</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIDELIZACIÓN + MARKETING -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Funciones · Fidelizar y vender más</div>
+      <h2>Fidelización y marketing</h2>
+      <p class="sub">Herramientas para que el cliente vuelva y para reactivar a los que ya te conocen.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">Puntos</span>
+        <h3>Programa de fidelidad</h3>
+        <ul class="checks">
+          <li>Puntos por compra, con tasa configurable</li>
+          <li>Se acreditan solos cuando el pedido se entrega</li>
+          <li>Catálogo de recompensas canjeables por puntos</li>
+          <li>El canje genera un cupón de un solo uso</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Mailing</span>
+        <h3>Campañas de email</h3>
+        <ul class="checks">
+          <li>Editor con vista previa en vivo</li>
+          <li>Audiencias: clientes, suscriptores, lista de espera, carritos abandonados</li>
+          <li>Envío en segundo plano por segmentos</li>
+          <li>Historial de todo lo enviado</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Carritos abandonados</span>
+        <h3>Recuperá ventas</h3>
+        <ul class="checks">
+          <li>Registro automático de carritos sin finalizar</li>
+          <li>Datos de contacto capturados en el checkout</li>
+          <li>Contacto directo por WhatsApp desde el panel</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">Cupones</span>
+        <h3>Promociones flexibles</h3>
+        <ul class="checks">
+          <li>Alcance por categoría, producto o medio de pago</li>
+          <li>Mínimo de compra, vencimiento y usos máximos</li>
+          <li>Porcentaje o monto fijo</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMA DE REFERIDOS -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Funciones · Crecer por recomendación</div>
+      <h2>Programa de referidos</h2>
+      <p class="sub">Tus propios clientes traen clientes nuevos. Un motor de crecimiento orgánico, montado sobre el sistema de puntos que ya trae la plataforma.</p>
+    </div>
+
+    <div class="flow">
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Cada cliente tiene su link único</h3>
+        <p>Desde "Mi cuenta → Invitá y ganá", cada cliente obtiene un código y un link personal para compartir por WhatsApp o redes, con botón de copiar.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>El amigo entra y se registra</h3>
+        <p>Cuando alguien llega por ese link y crea su cuenta, queda vinculado a quien lo invitó.</p>
+      </div>
+      <div class="fstep">
+        <div class="n"></div>
+        <h3>Los dos ganan — con la primera compra</h3>
+        <p>El premio se acredita recién cuando el invitado hace y recibe su primera compra: quien invitó suma puntos y el nuevo cliente arranca con un bonus de bienvenida. Todo automático, enganchado al mismo flujo que acredita los puntos por pedido entregado.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><b>Configurable y a prueba de abusos.</b> Se prende o apaga con un clic, igual que el sistema de puntos, y definís cuánto gana cada parte. El premio nunca se da solo por registrarse (evita cuentas falsas): exige una compra real, un único premio por invitado, y nadie puede referirse a sí mismo.</p>
+    </div>
+  </section>
+
+  <!-- COMUNICACIÓN / MAIL -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Comunicación</div>
+      <h2>Avisos y correos, a tu manera</h2>
+      <p class="sub">El sistema mantiene informados a tus clientes y a tu equipo, con los canales que ya usan.</p>
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Email: SMTP propio o Resend</h3>
+        <p>Elegís el proveedor de correo desde el panel, por franquicia: tu propio servidor <b>SMTP</b> (el de tu hosting, Gmail, el que uses) o <b>Resend</b>, una API moderna con excelente entregabilidad. Se usa tanto para el mail de confirmación de cada pedido como para las campañas de mailing.</p>
+      </div>
+      <div>
+        <h3>Aviso de ventas por Telegram</h3>
+        <p>Cuando entra una compra, el equipo recibe al instante un mensaje en un grupo de Telegram con el detalle del pedido y un enlace directo para verlo en el panel. Nadie tiene que estar mirando la pantalla: la venta te encuentra a vos.</p>
+      </div>
+      <div>
+        <h3>Confirmación al cliente, con tu voz</h3>
+        <p>Cada compra dispara un correo "Recibimos tu pedido" con el resumen y los totales, con la identidad visual de tu marca. El mensaje de bienvenida, la nota según el medio de pago y el cierre son <b>textos editables</b> desde el panel — vos decidís exactamente qué le dice tu marca a cada cliente.</p>
+      </div>
+      <div>
+        <h3>WhatsApp desde el panel</h3>
+        <p>Contactá con un clic a quienes dejaron un carrito o se anotaron en la lista de espera de un producto, con el mensaje ya armado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PANEL DE ADMIN -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Centro de control</div>
+      <h2>El panel de administración</h2>
+      <p class="sub">Todo el negocio en un solo lugar, en un panel claro y ordenado por secciones.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Estadísticas</h3>
+        <ul class="checks">
+          <li>Ingresos, ticket promedio, unidades y clientes por período (7 días, 30 días, 12 meses o todo)</li>
+          <li>Variación vs. el período anterior, de un vistazo</li>
+          <li>Gráfico de ingresos y productos más vendidos</li>
+          <li>Desglose por medio de pago, envío y estado</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Ventas, con lupa</h3>
+        <ul class="checks">
+          <li>Buscador por cliente y filtros por medio de pago y estado</li>
+          <li>Detalle completo del pedido en un clic, con comprobante (imagen o PDF) sin salir de la lista</li>
+          <li>Cambiar el estado del pedido al instante, sin pasos extra</li>
+          <li>Registro de auditoría: qué hizo cada admin y cuándo</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Gestión diaria</h3>
+        <ul class="checks">
+          <li>Productos con filtros, orden y búsqueda</li>
+          <li>Usuarios: buscar, roles y eliminación</li>
+          <li>Cupones, envíos, pagos y recompensas</li>
+          <li>Stock bajo (desde Odoo) de un vistazo</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Configuración autoservicio</h3>
+        <ul class="checks">
+          <li>Conexión con Odoo</li>
+          <li>Proveedor de mail (SMTP / Resend) y Telegram, con botón de prueba para cada uno</li>
+          <li>Textos del mail de confirmación de compra, editables</li>
+          <li>Datos de contacto, marca y slider del home</li>
+          <li>Modo mantenimiento con un clic</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MULTI-FRANQUICIA + TECNOLOGÍA -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">Escalable</div>
+      <h2>Pensada para crecer</h2>
+    </div>
+    <div class="two">
+      <div>
+        <h3>Cada tienda, independiente</h3>
+        <p>Cada franquicia funciona como una aplicación propia y completa desde el día uno: su identidad, su Odoo, su correo y su comunicación. Y si algún negocio tiene requerimientos particulares, queda abierta la opción de pedir desarrollos a medida — sin que nadie esté obligado a nada ni afecte al resto.</p>
+      </div>
+      <div>
+        <h3>Tecnología sólida</h3>
+        <p>Construida con tecnología moderna (Next.js, React, TypeScript, PostgreSQL). Rápida, responsiva, con login seguro, soporte de modo claro/oscuro y lista para posicionar en buscadores. Corre en tu propio servidor con SSL.</p>
+      </div>
+      <div>
+        <h3>Sin costos de plataforma</h3>
+        <p>No hay comisiones por venta ni suscripción a un marketplace. La tienda es un activo tuyo: pagás tu servidor y nada más.</p>
+      </div>
+      <div>
+        <h3>Autoadministrable</h3>
+        <p>Casi todo se cambia desde el panel sin tocar código: catálogo (vía Odoo), textos, imágenes, promociones, medios de pago y envío, comunicación y branding.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FICHA TÉCNICA -->
+  <section>
+    <div class="sec-head">
+      <div class="eyebrow">De un vistazo</div>
+      <h2>Ficha de la plataforma</h2>
+    </div>
+    <table class="spec">
+      <tr><th>Integración</th><td>Odoo por API (catálogo, stock, clientes e inventario/entregas). Solo requiere el módulo de Inventario.</td></tr>
+      <tr><th>Control de stock</th><td>Reserva automática al momento de la compra, con candado anti-sobreventa; se libera sola cuando Odoo despacha. No se vende dos veces la misma unidad, ni un fin de semana entero sin nadie mirando el sistema.</td></tr>
+      <tr><th>Medios de pago</th><td>Tarjeta con Mercado Pago o Payway (tokenización en el navegador, cobro y confirmación al instante, sin efectivo), transferencia (con comprobante) y contra entrega. Transferencia y contra entrega vienen habilitados por defecto desde la instalación; cada uno se activa o desactiva por separado desde el panel, con su propio descuento y sus propias credenciales.</td></tr>
+      <tr><th>Envíos</th><td>Métodos propios con costo, con o sin dirección, y restricciones por medio de pago. Retiro en el local y envío a domicilio vienen habilitados por defecto desde la instalación.</td></tr>
+      <tr><th>Clientes</th><td>Registro propio y con Google. Historial de pedidos y puntos.</td></tr>
+      <tr><th>Fidelización</th><td>Puntos por compra, catálogo de recompensas canjeables y programa de referidos (activable).</td></tr>
+      <tr><th>Marketing</th><td>Mailing por segmentos, cupones, lista de espera, recuperación de carritos.</td></tr>
+      <tr><th>Correo</th><td>SMTP propio o Resend, a elección, por franquicia, con botón de prueba integrado. Textos del mail de compra editables.</td></tr>
+      <tr><th>Avisos</th><td>Telegram al equipo por cada venta; confirmación por email al cliente.</td></tr>
+      <tr><th>Administración</th><td>Panel completo: estadísticas con filtros de período, ventas con búsqueda y filtros, registro de auditoría y configuración autoservicio.</td></tr>
+      <tr><th>Escalabilidad</th><td>Multi-franquicia sobre una única base de código.</td></tr>
+      <tr><th>Infraestructura</th><td>Servidor propio (VPS) con SSL. Sin comisiones por venta.</td></tr>
+    </table>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="eyebrow" style="color:var(--accent)">Llave en mano</div>
+    <h2>Tu tienda, tu stock, tus reglas.</h2>
+    <p>Una plataforma de venta online completa, integrada a tu Odoo y lista para escalar a todas tus sucursales — sin intermediarios y sin comisiones sobre lo que vendés.</p>
+    <div class="mark">Tienda Online + Odoo</div>
+  </section>
+
+  <footer>Documento comercial · Plataforma de tienda online integrada a Odoo</footer>
+
+</div>
+</body>
+</html>
