@@ -6,13 +6,14 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Moda from "./pages/Moda";
+import Tienda from "./pages/Tienda";
 import { FloatingActions } from "./components/FloatingActions";
 
 import { ThemeProvider } from "next-themes";
 
 const queryClient = new QueryClient();
 
-const HIDE_FLOATING_ACTIONS_ROUTES = ["/moda"];
+const HIDE_FLOATING_ACTIONS_ROUTES = ["/moda", "/tienda"];
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/moda" element={<Moda />} />
+        <Route path="/tienda" element={<Tienda />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
