@@ -1,18 +1,11 @@
+import { useEffect } from "react";
+
 const Tienda = () => {
-  return (
-    <div style={{ width: "100vw", height: "100vh", overflow: "hidden" }}>
-      <iframe
-        src="/tienda-manual.html"
-        title="Manual de uso — Tienda"
-        style={{
-          width: "100%",
-          height: "100%",
-          border: "none",
-          display: "block",
-        }}
-      />
-    </div>
-  );
+  useEffect(() => {
+    window.location.replace("/tienda-manual.html");
+  }, []);
+
+  return null;
 };
 
 export default Tienda;
